@@ -6,28 +6,51 @@ using namespace std;
 Node::Node(int val)
 	:data{ val }, lchild{ nullptr }, rchild{ nullptr }, weight{ 1 } {};
 
-int Node::getData() {
-	return data;
-}
-
 void Node::increaseWeight() {
 	weight++;
 }
 
-Node* Node::setLeft() {
-	return lchild;
-}
-
-Node* Node::setRight() {
-	return rchild;
+void Node::preOrder() {
+	if (this == nullptr)
+		return;
+	cout << this->data << " ";
+	this->lchild->preOrder();
+	this->rchild->preOrder();
 }
 
 void Node::inOrder() {
 	if (this == nullptr)
-			return;
+		return;
 	this->lchild->inOrder();
 	cout << this->data << " ";
 	this->rchild->inOrder();
+}
+
+void Node::postOrder() {
+	if (this == nullptr)
+		return;
+	this->lchild->postOrder();
+	this->rchild->postOrder();
+	cout << this->data << " ";
+}
+
+int Node::height() {
+	if (this == nullptr)
+		return 0;
+	int left = this->lchild->height();
+	int right = this->rchild->height();
+	return max(left, right) + 1;
+}
+
+bool Node::isBST(int min, int max) {
+	if (this == nullptr)
+		return true;
+
+	if (this->data <= min || this->data >= max) {
+		return false;
+	}
+
+	return this->lchild->isBST(min, this->data) && this->rchild->isBST(this->data, max);
 }
 
 Node* Node::insertR(int k) {
@@ -47,117 +70,81 @@ Node* Node::insertR(int k) {
 	return this;
 }
 
-
-/*int height(Node* r) {                        CALCOLO DELL'ALTEZZA del albero BST
-	if (r == nullptr)
-		return 0;
-	int left = height(r->lchild);
-	int right = height(r->rchild);
-	return max(left, right) + 1;
-}
-
-bool Is_BST(Node* r, int min, int max) {     CONTROLLO VALIDITA' di un albero BST
-	if (r == nullptr)
-		return true;
-
-	if (r->data <= min || r->data >= max) {
-		return false;
-	}
-
-	return Is_BST(r->lchild, min, r->data) && Is_BST(r->rchild, r->data, max);
-}
-
-void preOrder(Node* r) {                     ATTRAVERSAMENTO DI UN BST di tipo preorder
-	if (r == nullptr)
-		return;
-	cout << r->data << " ";
-	preOrder(r->lchild);
-	preOrder(r->rchild);
-}
-
-void postOrder(Node* r) {                    ATTRAVERSAMENTO DI UN BST di tipo postorder
-	if (r == nullptr)
-		return;
-	postOrder(r->lchild);
-	postOrder(r->rchild);
-	cout << r->data << " ";
-}
-
-
 bool check{ true };
-Node* search(Node* r, int k) {                RICERCA DEI NODI TRAMITE IL KEY in maniera ricorsiva (funziona solo per i BST)
-	if (r == nullptr) {
+Node* Node::searchR(int k) {
+	if (this == nullptr) {
 		check = false;
 		return nullptr;
 	}
 	else {
-		if (k == r->data) {
+		if (k == this->data) {
 			check = true;
-			return r;
+			return this;
 		}
 		else {
-			if (k < r->data) {
-				search(r->lchild, k);
+			if (k < this->data) {
+				this->lchild->searchR(k);
 				if (check == true)
-					return r;
+					return this;
 				else
 					return nullptr;
 			}
-			if (k > r->data) {
-				search(r->rchild, k);
+			if (k > this->data) {
+				this->rchild->searchR(k);
 				if (check == true)
-					return r;
+					return this;
 				else
 					return nullptr;
 			}
-			return r;
+			return this;
 		}
 	}
 }
 
-Node* remove(Node* r, int k) {                RIMOZIONE DEI NODI in maniera ricorsiva
+Node* Node::deleteNode(int k) {
 	Node* temp{ nullptr };
-	if (r == nullptr) {
-		return r;
+	if (this == nullptr) {
+		return this;
 	}
 
-	if (k < r->data) {
-		r->lchild = remove(r->lchild, k);
+	if (k < this->data) {
+		this->lchild = this->lchild->deleteNode(k);
 	}
-	else if (k > r->data) {
-		r->rchild = remove(r->rchild, k);
+	else if (k > this->data) {
+		this->rchild = this->rchild->deleteNode(k);
 	}
 	else {
-		if (r->lchild == nullptr && r->rchild == nullptr) {
-			delete r;
+		if (this->lchild == nullptr && this->rchild == nullptr) {
+			delete this;
 			return nullptr;
 		}
-		if (r->lchild == nullptr) {
-			temp = r->rchild;
-			delete r;
+		if (this->lchild == nullptr) {
+			temp = this->rchild;
+			delete this;
 			return temp;
 		}
-		else if (r->rchild == nullptr) {
-			temp = r->lchild;
-			delete r;
+		else if (this->rchild == nullptr) {
+			temp = this->lchild;
+			delete this;
 			return temp;
 		}
-		temp = r->rchild;
+		temp = this->rchild;
 		while (temp->lchild != nullptr) {
 			temp = temp->lchild;
 		}
-		r->data = temp->data;
-		r->rchild = remove(r->rchild, temp->data);
+		this->data = temp->data;
+		this->rchild = this->rchild->deleteNode(temp->data);
 	}
-	return r;
+	return this;
 }
 
-Node* iter_create(Node* r, int k) {             INSERIMENTO DEI NUOVI NODI in maniera iterativa
-	if (r == nullptr) {
+
+Node* Node::insertI(int k) {
+	if (this == nullptr) {
 		return new Node(k);
 	}
 
-	Node* current = r;
+	Node* current = this;
 	Node* father = nullptr;
 	while (current != nullptr) {
 		if (k < current->data) {
@@ -167,7 +154,7 @@ Node* iter_create(Node* r, int k) {             INSERIMENTO DEI NUOVI NODI in ma
 		else {
 			if (k == current->data) {
 				current->weight++;
-				return r;
+				return this;
 			}
 			father = current;
 			current = current->rchild;
@@ -180,15 +167,15 @@ Node* iter_create(Node* r, int k) {             INSERIMENTO DEI NUOVI NODI in ma
 	if (k > father->data) {
 		father->rchild = new Node(k);
 	}
-	return r;
+	return this;
 }
 
-Node* iter_search(Node* r, int k) {             RICERCA DEI NODI TRAMITE IL KEY in maniera iterativa (funziona solo per i BST)
-	Node* current{ r };
-	if (r == nullptr) {
+Node* Node::searchI(int k) {
+		Node* current{ this };
+	if (this == nullptr) {
 		return nullptr;
 	}
-	if (k < r->data) {
+	if (k < this->data) {
 		while (current != nullptr) {
 			if (k == current->data) {
 				return current;
@@ -196,7 +183,7 @@ Node* iter_search(Node* r, int k) {             RICERCA DEI NODI TRAMITE IL KEY 
 			current = current->lchild;
 		}
 	}
-	else if (k > r->data) {
+	else if (k > this->data) {
 		while (current != nullptr) {
 			if (k == current->data) {
 				return current;
@@ -205,4 +192,4 @@ Node* iter_search(Node* r, int k) {             RICERCA DEI NODI TRAMITE IL KEY 
 		}
 	}
 	return nullptr;
-}*/
+}
