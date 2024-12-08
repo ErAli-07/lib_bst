@@ -6,6 +6,14 @@ using namespace std;
 Node::Node(int val)
 	:data{ val }, lchild{ nullptr }, rchild{ nullptr }, weight{ 1 } {};
 
+Node* Node::getLeft() {
+	return lchild;
+}
+
+Node* Node::getRight(){
+	return lchild;
+}
+
 void Node::increaseWeight() {
 	weight++;
 }
@@ -192,4 +200,37 @@ Node* Node::searchI(int k) {
 		}
 	}
 	return nullptr;
+}
+
+ostream& operator<<(ostream& os, Node* r) {
+	if (r == nullptr) {
+		os << "Nodo Nullo" << endl;
+		return os;
+	}
+	os << "Key - Nodo Corrente: " << r->data << endl;
+	os << "Peso - Nodo Corrente: " << r->weight << endl;
+
+	if (r->lchild == nullptr) {
+		os << "Nodo Sinistro Nullo" << endl;
+	}
+	else {
+		os << "Key - Nodo Sinistro: " << r->lchild->data << endl;
+	}
+
+	if (r->rchild == nullptr) {
+		os << "Nodo Destro Nullo" << endl;
+	}
+	else {
+		os << "Key - Nodo Destro: " << r->rchild->data << endl;
+	}
+	return os;
+}
+
+istream& operator>>(istream& is, Node* r) {
+	if (r == nullptr) {
+		cout << "Nodo Nullo" << endl;
+		return is;
+	}
+	is >> r->data;
+	return is;
 }
