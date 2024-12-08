@@ -7,13 +7,17 @@ using namespace std;
 
 class Node {                                        // Definizione di Classe
 private:
-	int data;                                     // Key
-	int weight;                                  // Dimensione
-	Node* lchild;                               // Puntatore Sinistro
-	Node* rchild;                              // Puntatore Destro
+	int data;                                                  // Key
+	int weight;                                               // Dimensione
+	Node* lchild;                                            // Puntatore Sinistro
+	Node* rchild;                                           // Puntatore Destro
+	friend ostream& operator<<(ostream& os, Node* r);      // Overloading del operatore <<
+	friend istream& operator>>(istream& is, Node* r);     // Overloading del operatore >>
 public:
 	Node(int val);                           // Inizializzazione dei altri membri
-	void increaseWeight();                 // Aumento del peso di un Nodo
+	Node* getLeft();                        // Dirige l'Input verso il Nodo Sinistro
+	Node* getRight();                      // Dirige l'Input verso il Nodo Destro
+	void increaseWeight();                // Aumento del peso di un Nodo
 	void inOrder();                      // ATTRAVERSAMENTO DI UN BST di tipo inorder
 	void preOrder();                     // ATTRAVERSAMENTO DI UN BST di tipo preorder
 	void postOrder();                    // ATTRAVERSAMENTO DI UN BST di tipo postorder
