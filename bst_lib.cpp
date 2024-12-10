@@ -6,6 +6,8 @@ using namespace std;
 Node::Node(int val)
 	:data{ val }, lchild{ nullptr }, rchild{ nullptr }, weight{ 1 } {};
 
+Node::Node() {};
+
 Node* Node::getLeft() {
 	return lchild;
 }
@@ -50,15 +52,21 @@ int Node::height() {
 	return max(left, right) + 1;
 }
 
-bool Node::isBST(int min, int max) {
+bool Node::isBST() {
 	if (this == nullptr)
 		return true;
 
-	if (this->data <= min || this->data >= max) {
+	if (this->lchild != nullptr && this->lchild->data > this->data) {
+		cout << "Questo Binary tree non corrisponde a un tipo BST " << endl;
 		return false;
 	}
 
-	return this->lchild->isBST(min, this->data) && this->rchild->isBST(this->data, max);
+	if (this->rchild != nullptr && this->rchild->data < this->data) {
+		cout << "Questo Binary tree non corrisponde a un tipo BST " << endl;
+		return false;
+	}
+
+	return this->lchild->isBST() && this->rchild->isBST();
 }
 
 Node* Node::insertR(int k) {
@@ -202,7 +210,7 @@ Node* Node::searchI(int k) {
 	return nullptr;
 }
 
-ostream& operator<<(ostream& os, Node* r) {
+ostream& operator<<(ostream& os, Node* &r) {
 	if (r == nullptr) {
 		os << "Nodo Nullo" << endl;
 		return os;
@@ -226,11 +234,10 @@ ostream& operator<<(ostream& os, Node* r) {
 	return os;
 }
 
-istream& operator>>(istream& is, Node* r) {
-	if (r == nullptr) {
-		cout << "Nodo Nullo" << endl;
-		return is;
-	}
-	is >> r->data;
+istream& operator>>(istream& is, Node &r) {
+	cout << "Immetti il valore che deve avere la key del Nodo: ";
+	is >> r.data;
+	r.lchild = nullptr;
+	r.rchild = nullptr;
 	return is;
 }
