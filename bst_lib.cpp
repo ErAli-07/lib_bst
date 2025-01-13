@@ -46,7 +46,7 @@ void Node::postOrder() {
 
 int Node::height() {
 	if (this == nullptr)
-		return 0;
+		return -1;
 	int left = this->lchild->height();
 	int right = this->rchild->height();
 	return max(left, right) + 1;
