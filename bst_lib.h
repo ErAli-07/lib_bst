@@ -25,8 +25,8 @@ public:
 	int height();                        // CALCOLO DELL'ALTEZZA del albero BST
 	bool isBST();                        // CONTROLLO VALIDITA' di un albero BST
 	Node* insertR(int k);                // INSERIMENTO DEI NUOVI NODI in maniera ricorsiva
-	Node* searchR(int k);                //	RICERCA DEI NODI TRAMITE IL KEY in maniera ricorsiva (funziona solo per i BST)
-	Node* deleteNode(int k);             // RIMOZIONE DEI NODI in maniera
+	Node* searchR(int k);                // RICERCA DEI NODI TRAMITE IL KEY in maniera ricorsiva (funziona solo per i BST)
+	Node* deleteNode(int k);             // RIMOZIONE DEI NODI
 	Node* insertI(int k);                // INSERIMENTO DEI NUOVI NODI in maniera iterativa
 	Node* searchI(int k);                // RICERCA DEI NODI TRAMITE IL KEY in maniera iterativa (funziona solo per i BST)
 };
